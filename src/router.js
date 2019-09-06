@@ -9,6 +9,11 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
+      path: '/login',
+      name: 'login',
+      component: () => import('./views/Login.vue'),
+    },
+    {
       path: '/about',
       name: 'about',
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
@@ -18,10 +23,6 @@ export default new Router({
       name: 'home',
       component: Home,
     },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import('./views/Login.vue'),
-    },
+
   ],
 });
