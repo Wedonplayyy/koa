@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
+import Content from './views/content/Content.vue'
 
 Vue.use(Router);
 
@@ -24,10 +25,14 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home,
+      component: Content,
       meta: {
         title: '后台管理系统-首页',
-      }
+      },
+      children:[{
+        path:'',
+        component:Home
+      }]
     },
 
   ],

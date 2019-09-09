@@ -83,7 +83,7 @@
             prop="svg"
             :rules="[{ required: true, message: '验证码不能为空'},]">
             <div style="display: flex;">
-              <el-input type="text" v-model="registerValidateForm.sms"  maxlength="4" placeholder="请输入验证码" class="el-input"></el-input>
+              <el-input type="text" v-model="registerValidateForm.sms"  maxlength="6" placeholder="请输入验证码" class="el-input"></el-input>
               <div style="padding:0 0 0 10px;"></div>
               <el-button type="info" @click="sendSms">发送验证码</el-button>
             </div>
@@ -176,11 +176,14 @@
       },
       register(){//注册
         this.$axios.req('api/users/register',{
-          username:this.numberValidateForm.name,
-          password:this.numberValidateForm.password,
-          sms:this.numberValidateForm.svg
+          username:this.registerValidateForm.name,
+          password:this.registerValidateForm.password,
+          sms:this.registerValidateForm.sms
         }).then(res =>{
           console.log(res.data);
+          if(res.data.code===200){
+            this.$router.push('/');
+          }
         }).catch(err =>{
           console.log(err);
         })
