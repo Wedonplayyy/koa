@@ -13,9 +13,21 @@ export default {
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    getHome(){
+      this.$axios.req('api/home').then(res =>{
+        if(res.data.code===200){
+          console.log(res.data);
+        }else{
+          this.$router.push('/login')
+        }
+      }).catch(err =>{
+        console.log(err);
+      })
+    }
+  },
   mounted() {
-
+    this.getHome();
   },
   created() {
 
