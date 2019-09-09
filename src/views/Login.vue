@@ -161,7 +161,7 @@
             console.log(res.data);
             if(res.data.data){
               this.$router.push({
-                path:'/home'
+                path:'/'
               })
             }else{
               this.getSvg();

@@ -12,6 +12,9 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: () => import('./views/Login.vue'),
+      meta: {
+        title: '后台管理系统-登录',
+      }
     },
     {
       path: '/about',
@@ -19,9 +22,12 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
     },
     {
-      path: '/home',
+      path: '/',
       name: 'home',
       component: Home,
+      meta: {
+        title: '后台管理系统-首页',
+      }
     },
 
   ],
