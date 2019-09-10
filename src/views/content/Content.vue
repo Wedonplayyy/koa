@@ -5,11 +5,11 @@
         <el-header class="el-header">hyy后台管理系统</el-header>
         <el-container class="el-container">
           <el-aside class="el-aside" width="240px">
-            <el-menu :default-active="activeIndex" @select="handleSelect"  @open="handleOpen">
-              <el-menu-item index="1"><i class="el-icon-message"></i>首页
+            <el-menu :default-active="this.$router.path" @select="handleSelect"  @open="handleOpen" router>
+              <el-menu-item index="/home"><i class="el-icon-message"></i>首页
                 <div id="tab" style="z-index:1;position: relative;left:-20px;top:-56px;background-color:#409EFF;width:5px;height:56px;"></div>
               </el-menu-item>
-              <el-menu-item index="2"><i class="el-icon-message"></i>日程管理
+              <el-menu-item index="/a"><i class="el-icon-message"></i>日程管理
               </el-menu-item>
               <el-menu-item index="3"><i class="el-icon-message"></i>通讯录
               </el-menu-item>

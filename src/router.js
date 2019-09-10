@@ -18,22 +18,17 @@ export default new Router({
       }
     },
     {
-      path: '/about',
-      name: 'about',
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
-    },
-    {
       path: '/',
       name: 'home',
       component: Content,
       meta: {
         title: '后台管理系统-首页',
       },
-      children:[{
-        path:'',
-        component:Home
-      }]
+      children:[
+        {path:'/', component:Home},
+        {path:'/home', component:Home},
+        {path:'/a', component:Home},
+        ]
     },
-
   ],
 });
