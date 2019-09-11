@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="title"><i class="el-icon-message"></i>首页</div>
+    <div class="title"><i class="el-icon-s-unfold"></i>首页</div>
     <div class="graph">
       <div class="card">
         <div>本月营收</div>
-        <div style="width:50px;height:50px;background-color: red"></div>
+        <div style="width:50px;height:50px;background-color: #eeeeee"></div>
       </div>
       <el-divider direction="vertical"></el-divider>
       <div class="card">待回款</div>
@@ -32,13 +32,36 @@
               align="left"
               type="date"
               placeholder="选择日期"
+              value-format="yyyy-MM-dd"
+              @change="getDynamic"
               :picker-options="pickerOptions">
             </el-date-picker>
           </div>
-          <div class="update-item">
-            <div>123</div>
-            <div>123</div>
-            <div>123</div>
+          <div class="dynamic">
+            <div v-if="Object.keys(this.dynamic).length==0" style="display: flex;padding:2%;">暂无数据</div>
+
+            <div v-else style="overflow-y:scroll;height:245px;">
+              <div v-for="item in this.dynamic" :key="item._id" style="padding:1% 2%;margin: 1% 0%;background-color: #eeeeee;">
+                <div class="dynamic-item">
+                  <div>{{item.classification}}</div>
+                  <div>{{item.username}}</div>
+                </div>
+                <div>
+                  <div v-if="item.reportUsers.length===0">
+                    <div style="visibility: hidden">隐藏的div</div>
+                  </div>
+                  <div v-else class="dynamic-item">
+                    <div  style="display: flex;">
+                      汇报人:<div v-for="(user,index) in item.reportUsers" :key="index">{{user}}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="dynamic-item">
+                  <div>动态:{{item.dynamic}}</div>
+                  <div>发布于{{dateFormat(item.date)}}</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </el-card>
@@ -62,6 +85,14 @@
             <el-option label="其他事物" value="其他事物"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item
+          v-if="form.option==='工作汇报'"
+          label="相关汇报人" :label-width="formLabelWidth">
+          <el-select v-model="Person.option" placeholder="请选择汇报人" style="width: 100%;" multiple @change="show">
+            <el-option label="张三" value="张三"></el-option>
+            <el-option label="李四" value="李四"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="详情内容" :label-width="formLabelWidth">
           <el-input type="textarea" v-model="form.content" autocomplete="off" style="width:100%" placeholder="请输入内容"></el-input>
         </el-form-item>
@@ -83,7 +114,8 @@ export default {
   props: {},
   data() {
     return {
-      value:"",//日期
+      user:{},//用户
+      value:null,//日期
       pickerOptions: {// 日期选择
         disabledDate(time) {
           return time.getTime() > Date.now();
@@ -94,28 +126,73 @@ export default {
         option: '',
         content:"",
       },
-      formLabelWidth: '120px'
+      Person: {// 汇报人
+        option: null,
+      },
+      formLabelWidth: '120px',
+      dynamic:{},// 动态
     }
   },
   methods: {
-    getHome(){
+    show(){
+      console.log(this.Person.option);
+    },
+    dateFormat(times){
+      let da = new Date(times);
+      let year = da.getFullYear()+'年';
+      let month = da.getMonth()+1+'月';
+      let day = da.getDate()+'日';
+      return [year,month,day].join('');
+    },
+    getHome(){//验证是否登陆
       this.$axios.req('api/home').then(res =>{
         // console.log(res.data);
         if(res.data.code!==200){
           this.$router.push('/login');
         }
+        else{
+          this.user = res.data.data;
+          console.log(this.user);
+          this.getDynamic(this.value);
+        }
       }).catch(err =>{
         console.log(err);
       });
     },
-    addDynamic(){
-      this.$axios.req('api/addDynamic',{}).then(res =>{
-
+    addDynamic(){//添加动态
+      this.$axios.req('api/addDynamic',{
+        //发布人
+        username: this.user.username,
+        // 发布时间
+        date: Date.now,
+        // 动态内容
+        dynamic: this.form.content,
+        // 动态分类
+        classification: this.form.option,
+        // 汇报人
+        reportUsers: this.Person.option
+      }).then(res =>{
+        console.log(res.data);
+        this.getDynamic()
       }).catch(err =>{
         console.log(err);
       });
       this.dialogFormVisible = false;
-    }
+    },
+    getDynamic(){//根据选中的时间获取动态
+      this.$axios.req('api/getDynamic').then(res =>{
+        this.dynamic=res.data.data;
+        let str =String(this.value);
+        console.log(str);
+        this.dynamic = this.dynamic.filter(function(item){
+          return item.date.slice(0,10)===str;
+        })
+        console.log(this.dynamic);
+      }).catch(err =>{
+        console.log(err);
+      })
+    },
+
   },
 
   mounted() {
@@ -138,7 +215,7 @@ export default {
     padding:15px;
   }
   .graph{
-    /*首页柱状图*/
+    /*首页图*/
     width:90%;
     height:150px;
     margin:1%;
@@ -148,7 +225,7 @@ export default {
     align-items: center;
   }
   .card{
-    /*柱状图*/
+    /*图*/
     width:30%;
     height:100%;
     display: flex;
@@ -158,7 +235,7 @@ export default {
   .charts{
     /*利润词云图*/
     width:44%;
-    height:320px;
+    height:400px;
     margin:1%;
     background-color: white;
   }
@@ -167,6 +244,7 @@ export default {
     display: flow;
     width:44%;
     height:100%;
+    max-height:400px;
     margin:1%;
     background-color: white;
   }
@@ -183,14 +261,19 @@ export default {
   }
   .card-body {
     padding: 1%;
+    max-height:100%;
     width: 100%;
   }
   .date-picker{
     width:100%;
     display: flex;
   }
-  .update-item{
+  .dynamic{
     width:100%;
-    height:
+  }
+  .dynamic-item{
+    padding:2% 0%;
+    display: flex;
+    justify-content: space-between;
   }
 </style>

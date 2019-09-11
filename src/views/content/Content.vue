@@ -2,19 +2,30 @@
     <div class="body">
       <router-view v-if="$route.path ==='/login'"></router-view>
       <el-container v-else class="el-container">
-        <el-header class="el-header">hyy后台管理系统</el-header>
+        <el-header class="el-header">hyy后台管理系统
+          <el-button @click="logout">退出登录</el-button>
+        </el-header>
         <el-container class="el-container">
-          <el-aside class="el-aside" width="240px">
-            <el-menu :default-active="this.$router.path" @select="handleSelect"  @open="handleOpen" router>
-              <el-menu-item index="/home"><i class="el-icon-message"></i>首页
-                <div id="tab" style="z-index:1;position: relative;left:-20px;top:-56px;background-color:#409EFF;width:5px;height:56px;"></div>
+          <el-aside class="el-aside" width="">
+            <el-radio-group v-model="isCollapse" style="margin-bottom: 2px;">
+              <el-radio-button :label="false">展开</el-radio-button>
+              <el-radio-button :label="true">收起</el-radio-button>
+            </el-radio-group>
+            <el-menu :default-active="this.$router.path"  class="el-menu-vertical-demo" @select="handleSelect"  @open="handleOpen" router :collapse="isCollapse">
+              <el-menu-item index="/home">
+                  <i class="el-icon-location"></i>
+                  <span slot="title">首页</span>
+<!--                <div id="tab" style="z-index:1;position: relative;left:-20px;top:-56px;background-color:#409EFF;width:5px;height:56px;"></div>-->
               </el-menu-item>
-              <el-menu-item index="/a"><i class="el-icon-message"></i>日程管理
+              <el-menu-item index="/a"><i class="el-icon-date"></i>
+                <span slot="title">日程管理</span>
               </el-menu-item>
-              <el-menu-item index="3"><i class="el-icon-message"></i>通讯录
+              <el-menu-item index="3"><i class="el-icon-document"></i>
+                <span slot="title">通讯录</span>
               </el-menu-item>
               <el-submenu index="4">
-                <template slot="title"><i class="el-icon-message"></i>组织员工
+                <template slot="title"><i class="el-icon-user"></i>
+                  <span slot="title">组织员工</span>
                 </template>
                 <el-menu-item-group>
 <!--                  <template slot="title">分组一</template>-->
@@ -23,7 +34,9 @@
                 </el-menu-item-group>
               </el-submenu>
               <el-submenu index="5">
-                <template slot="title" index="5"><i class="el-icon-message"></i>表单页
+                <template slot="title" index="5">
+                  <i class="el-icon-files"></i>
+                  <span >表单页</span>
                 </template>
                 <el-menu-item-group>
                   <template slot="title">分组一</template>
@@ -51,43 +64,24 @@
     props: {},
     data() {
       return {
-        activeIndex:'1',
-        tabPos:0,
+        activeIndex:'1',//侧边栏默认选中第一项
+        isCollapse: true,//默认展开侧边栏
       };
     },
     methods: {
-      //获取元素的纵坐标
-      getElemPos(obj){
-        let pos = {"top":0, "left":0};
-        if (obj.offsetParent){
-          while (obj.offsetParent){
-            pos.top += obj.offsetTop;
-            pos.left += obj.offsetLeft;
-            obj = obj.offsetParent;
-          }
-        }else if(obj.x){
-          pos.left += obj.x;
-        }else if(obj.x){
-          pos.top += obj.y;
-        }
-        return {x:pos.left, y:pos.top};
-        },
-      moveTab(){
-        let e = document.activeElement;
-        let y;
-        console.log(this.getElemPos(e));
-        y=this.getElemPos(e).y;
-        let tab = document.getElementById('tab');
-        tab.style.top =y-124+"px";
-        console.log(document.getElementById('tab'));
-        console.log(y);
-      },
       handleSelect(key, keyPath) {
-        this.moveTab();
         console.log(key, keyPath);
       },
       handleOpen(index,indexPath){
         console.log(index, indexPath);
+      },
+      logout(){//退出登录
+        this.$axios.req('api/users/logout').then(res =>{
+          console.log(res);
+          this.getHome();
+        }).catch(err =>{
+          console.log(err);
+        })
       },
     },
     mounted() {
@@ -115,7 +109,10 @@
     /*text-align: center;*/
     /*line-height: 30px;*/
   }
-
+  .el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 200px;
+    min-height: 400px;
+  }
   .el-main {
     background-color: #E9EEF3;
     text-align: center;
