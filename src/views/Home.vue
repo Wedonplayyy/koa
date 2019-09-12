@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width: 1400px;">
     <div class="title"><i class="el-icon-s-unfold"></i>首页</div>
     <div class="graph">
       <div class="card">
@@ -99,7 +99,7 @@
 
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button @click="cancel">取 消</el-button>
         <el-button type="primary" @click="addDynamic">确 定</el-button>
       </div>
     </el-dialog>
@@ -123,21 +123,27 @@ export default {
       },
       dialogFormVisible: false, // 添加动态对话框
       form: {// 添加动态
-        option: '',
-        content:"",
+        option: null,
+        content:null,
       },
       Person: {// 汇报人
         option: null,
       },
       formLabelWidth: '120px',
-      dynamic:{},// 动态
+      dynamic:{},// get获取的动态
     }
   },
   methods: {
-    show(){
-      console.log(this.Person.option);
+    cancel(){
+      this.dialogFormVisible = false;
+      this.clearForm();
     },
-    dateFormat(times){
+    clearForm(){
+      this.form.option =null;
+      this.form.content=null;
+      this.Person.option=null;
+    },
+    dateFormat(times){// 日期格式化
       let da = new Date(times);
       let year = da.getFullYear()+'年';
       let month = da.getMonth()+1+'月';
@@ -152,8 +158,9 @@ export default {
         }
         else{
           this.user = res.data.data;
+          console.log(res.data);
           console.log(this.user);
-          this.getDynamic(this.value);
+          // this.getDynamic(this.value);
         }
       }).catch(err =>{
         console.log(err);
@@ -173,9 +180,11 @@ export default {
         reportUsers: this.Person.option
       }).then(res =>{
         console.log(res.data);
-        this.getDynamic()
+        this.clearForm();
+        this.getDynamic();
       }).catch(err =>{
         console.log(err);
+        this.clearForm();
       });
       this.dialogFormVisible = false;
     },
@@ -209,6 +218,7 @@ export default {
 </script>
 
 <style scoped>
+
   .title{
     /*标题*/
     width:50px;
