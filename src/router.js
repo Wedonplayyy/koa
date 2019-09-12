@@ -5,6 +5,9 @@ import Content from './views/content/Content.vue';
 import Calendar from './views/Calendar.vue';
 import Address from './views/Address.vue';
 import Administration from './views/Administration.vue';
+import Offer from './views/Administration/Offer.vue';
+import Salary from './views/Administration/Salary.vue';
+import Person from './views/Administration/Person.vue';
 
 Vue.use(Router);
 
@@ -33,6 +36,9 @@ export default new Router({
         {path:'/calendar', component:Calendar},
         {path:'/address', component:Address},
         {path:'/administration', component:Administration},
+        {path:'/administration/offer', component:Offer},
+        {path:'/administration/salary', component:Salary},
+        {path:'/administration/person', component:Person},
         ]
     },
   ],
