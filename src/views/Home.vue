@@ -1,15 +1,22 @@
 <template>
   <div style="width: 1400px;">
-    <div class="title"><i class="el-icon-s-unfold"></i>首页</div>
+    <div class="title">
+      <el-avatar shape="square" size="small" icon="el-icon-s-unfold"></el-avatar>首页</div>
     <div class="graph">
       <div class="card">
         <div>本月营收</div>
-        <div style="width:50px;height:50px;background-color: #eeeeee"></div>
+        <el-progress type="circle" :percentage="25"></el-progress>
       </div>
       <el-divider direction="vertical"></el-divider>
-      <div class="card">待回款</div>
+      <div class="card">
+        <div>待回款</div>
+        <el-progress type="circle" :percentage="25"></el-progress>
+      </div>
       <el-divider direction="vertical"></el-divider>
-      <div class="card">合同</div>
+      <div class="card">
+        <div>合同</div>
+        <el-progress type="circle" :percentage="25"></el-progress>
+      </div>
     </div>
     <div style="display: flex;">
       <el-card class="charts" shadow="hover">
@@ -201,11 +208,18 @@ export default {
         console.log(err);
       })
     },
-
+    getTableData(){
+      this.$axios.req('api/getTableData').then(res =>{
+        console.log(res.data.data);
+      }).catch(err =>{
+        console.log(err);
+      })
+    },
   },
 
   mounted() {
     this.getHome();
+    this.getTableData();
   },
   created() {
 
@@ -221,8 +235,10 @@ export default {
 
   .title{
     /*标题*/
-    width:50px;
+    width:100%;
     padding:15px;
+    display: flex;
+    align-items: center;
   }
   .graph{
     /*首页图*/
@@ -239,7 +255,7 @@ export default {
     width:30%;
     height:100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
   }
   .charts{
