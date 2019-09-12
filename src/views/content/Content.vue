@@ -3,13 +3,16 @@
       <router-view v-if="$route.path ==='/login'"></router-view>
       <el-container v-else class="el-container">
         <el-header class="el-header">
-          <div style="display: flex;justify-content: space-between">
+          <div style="display: flex;justify-content: space-between;height: 100%;">
             <div>hyy后台管理系统</div>
-            <div>
-              <div>
-<!--                欢迎你，{{user.username}}-->
+            <div style="display: flex;justify-content: space-between;height: 100%;">
+              <div style="display: flex;align-items: center;height: 100%;">
+                <el-avatar icon="el-icon-user-solid"></el-avatar>
               </div>
-              <el-button @click="logout">退出登录</el-button>
+              <div style="height: 100%;padding: 0 5%;">{{this.user.username}}</div>
+              <div>
+                <el-button @click="logout">退出登录</el-button>
+              </div>
             </div>
           </div>
         </el-header>
@@ -19,27 +22,29 @@
               <el-menu-item @click="isCollapse=!isCollapse">
                   <i :class="{'el-icon-d-arrow-right':isCollapse==true,'el-icon-d-arrow-left':isCollapse==false}" ></i>
               </el-menu-item>
-              <el-menu-item index="1" route="/home" :class="{'solidLeftBorder':this.$route.path==='/home'}">
+              <el-menu-item index="/home" :class="{'solidLeftBorder':this.$route.path==='/home'}">
                   <i class="el-icon-location"></i>
                   <span slot="title">首页</span>
               </el-menu-item>
-              <el-menu-item index="2" route="/calendar" :class="{'solidLeftBorder':this.$route.path==='/calendar'}">
+              <el-menu-item index="/calendar" :class="{'solidLeftBorder':this.$route.path==='/calendar'}">
                 <i class="el-icon-date"></i>
                 <span slot="title">日程管理</span>
               </el-menu-item>
-              <el-menu-item index="3" route="/address" :class="{'solidLeftBorder':this.$route.path==='/address'}">
+              <el-menu-item index="/address" :class="{'solidLeftBorder':this.$route.path==='/address'}">
                 <i class="el-icon-document"></i>
                 <span slot="title">通讯录</span>
               </el-menu-item>
-              <el-submenu index="4" route="/home" :class="{'solidLeftBorder':this.activeIndex==='4'}">
-                <template slot="title" >
-                  <i class="el-icon-user"></i>
-                  <span slot="title">组织员工</span>
+              <el-submenu index="1" >
+                <template slot="title"  >
+                  <div :class="{'solidLeftBorder':(this.$route.path==='/administration/offer')||(this.$route.path==='/administration/person')||(this.$route.path==='/administration/salary')}">
+                    <i class="el-icon-user" ></i>
+                    <span slot="title">组织员工</span>
+                  </div>
                 </template>
                 <el-menu-item-group>
-                  <el-menu-item index="4-1" route="/home" :class="{'solidLeftBorder':this.activeIndex==='4-1'}">offer管理</el-menu-item>
-                  <el-menu-item index="4-2" route="/home" :class="{'solidLeftBorder':this.activeIndex==='4-2'}">人员信息</el-menu-item>
-                  <el-menu-item index="4-3" route="/home" :class="{'solidLeftBorder':this.activeIndex==='4-3'}">薪酬管理</el-menu-item>
+                  <el-menu-item index="/administration/offer">offer管理</el-menu-item>
+                  <el-menu-item index="/administration/person">人员信息</el-menu-item>
+                  <el-menu-item index="/administration/salary">薪酬管理</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
               <el-submenu index="5">
@@ -74,16 +79,29 @@
       return {
         activeIndex:"1",//侧边栏默认选中首页
         isCollapse: true,//默认收起侧边栏
+        user:{},//用户
       };
     },
     methods: {
+      getHome(){//验证是否登陆
+        this.$axios.req('api/home').then(res =>{
+          // console.log(res.data);
+          if(res.data.code!==200){
+            this.$router.push('/login');
+          }
+          else{
+            this.user = res.data.data;
+            console.log(this.user);
+          }
+        }).catch(err =>{
+          console.log(err);
+        });
+      },
       handleSelect(key, keyPath) {
-        this.activeIndex=key;
         console.log(this.activeIndex);
         console.log(key, keyPath);
       },
       handleOpen(index,indexPath){
-        this.activeIndex=index;
         console.log(this.activeIndex);
         console.log(index, indexPath);
       },
@@ -97,6 +115,8 @@
       },
     },
     mounted() {
+      this.getHome();
+      this.activeIndex=this.$route.path;
       console.log(this.activeIndex);
     },
     created() {
@@ -123,9 +143,14 @@
   }
   .solidLeftBorder {
     /*侧边栏选中改变边框*/
-    border-left-style: solid;
-    border-left-color: #409EFF;
-    border-left-width: 5px;
+    /*border-left-style: solid;*/
+    /*border-left-color: #409EFF;*/
+    /*border-left-width: 5px;*/
+    /*border-left-height:56px;*/
+  }
+  .solidLeftBorder:before{
+    display:block;
+    content:""; position:absolute; left:0; top:-2px; width:5px; height:56px; background-color:#409EFF;
   }
   .el-menu-vertical-demo:not(.el-menu--collapse) {
     width: 200px;
