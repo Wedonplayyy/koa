@@ -6,6 +6,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios';
 import http from './http'
+import './mock'
 
 Vue.use(ElementUI);
 Vue.prototype.$axios = http;
