@@ -12,10 +12,17 @@
         <template
           slot="dateCell"
           slot-scope="{date, data}">
-          <div style="width: 100%;height: 100%;" @click="addDialog(data.day)">
-            <div :class="data.isSelected ? 'is-selected' : ''" style="float: left;">
+          <div style="width: 100%;max-height: 100%;max-width: 100%;" @click="addDialog(data.day)">
+            <div :class="data.isSelected ? 'is-selected' : ''" style="text-align: left;width: 100%;">
               {{ data.day.slice(8)}} {{ data.isSelected ? '✔️' : ''}}
             </div>
+            <div style="width: 100%;height:60px;overflow-y:auto;background-color: #e1f3d8" v-if="hasDynamic(data.day).length!==0">
+              <div v-for="item in hasDynamic(data.day)">
+                <div v-for="user in item.users">{{user}}</div>
+                <div>{{item.schedule}}</div>
+              </div>
+            </div>
+            <div style="clear: both"></div>
           </div>
         </template>
       </el-calendar>
@@ -72,6 +79,7 @@
         <el-button type="primary" @click="addDynamic">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="deleteDialogVisible" append-to-body></el-dialog>
   </div>
 
 </template>
@@ -83,11 +91,14 @@
         props: {},
         data() {
             return {
-              user:{},
+              // user:{},
+              arr:[],
+              calendar:[],//日程数组
               dateSelected:'',//添加日程的日期
               value:new Date(),// 今天时间数据
               outerVisible: false,// 对话框
               innerVisible: false,// 参与人对话框
+              deleteDialogVisible:false,// 删除日程对话框
               form: {
                 content: '',//日程内容
                 person: [],//参与人
@@ -100,6 +111,11 @@
 
         },
         methods: {
+          hasDynamic(day){
+            return this.calendar.filter(function f(item) {
+              return (String(item.startTime).slice(0, 10))===day? item:null;
+              });
+          },
           cancelInner(){// 取消
             this.innerVisible = false;
             this.name=null;
@@ -127,7 +143,8 @@
           },
           getCalendar(){// 获取日程
             this.$axios.req('api/calendar').then(res =>{
-              console.log(res.data);
+              this.calendar=res.data.data;
+              console.log(res.data.data);
             }).catch(err =>{
               console.log(err);
             })
@@ -159,8 +176,6 @@
             else{
               return
             }
-
-
           },
           addDialog(dateSelected){// 点击日期弹出添加日程对话框
             this.dateSelected = dateSelected;
@@ -187,6 +202,9 @@
               });
             }
           },
+          deleteCalendar(){
+            this.deleteDialogVisible = true;
+          },
           validTime(startTime,endTime){// 比较时间
             let arr1 = startTime.split("-");
             let arr2 = endTime.split("-");
@@ -206,9 +224,9 @@
                 this.$router.push('/login');
               }
               else{
-                this.user = res.data.data;
-                console.log(this.user);
-                this.$store.commit('setUser', res.data.data);
+                // this.user = res.data.data;
+                // console.log(this.user);
+                // this.$store.commit('setUser', res.data.data);
               }
             }).catch(err =>{
               console.log(err);
