@@ -32,7 +32,7 @@ Mock.mock('api/getTableData','get',{
     desc:'@cword(2,4)',
     startTime:'@date("yyyy-MM-dd")',
     endTime:'@date("yyyy-MM-dd")',
-    'title|1':["已截止","未发布"],
+    'tag|1':["已截止","未发布"],
     'web|1':["Github","豆瓣","百度","掘金"],
   }]
 })

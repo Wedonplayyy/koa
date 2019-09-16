@@ -1,7 +1,10 @@
 <template>
   <div style="width: 1400px;">
     <div class="title">
-      <el-avatar shape="square" size="small" icon="el-icon-s-unfold"></el-avatar>首页</div>
+      <el-avatar shape="square" size="small" icon="el-icon-s-unfold"></el-avatar>
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+    </el-breadcrumb></div>
     <div class="graph">
       <div class="card">
         <div>本月营收</div>
@@ -78,9 +81,54 @@
         <span>网站调查问卷</span>
       </div>
       <div>
+        <el-table
+          :data="tableData"
+          style="width: 100%;"
+          :header-cell-style="isCenter"
+          :cell-style="isCenter">
+          <el-table-column
+            prop="name"
+            label="问卷名称"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="desc"
+            label="问卷描述"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="startTime"
+            label="创建时间">
+          </el-table-column>
+          <el-table-column
+            prop="endTime"
+            label="截止时间">
+          </el-table-column>
+          <el-table-column
+            prop="tag"
+            label="问卷主题">
+            <template slot-scope="scope">
+              <el-tag>{{scope.row.tag}}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="web"
+            :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]"
+            label="网站名称">
+            <template slot-scope="scope">
+              <el-tag
+                :type="tagReturn(scope.row.web)">{{scope.row.web}}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="操作">
+            <template slot-scope="scope">
+              <el-button type="primary" style="padding: 10px 20px;">查看网站详情</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
     </el-card>
-
 <!--    添加动态对话框-->
     <el-dialog title="添加动态" :visible.sync="dialogFormVisible">
       <el-form :model="form">
@@ -110,6 +158,7 @@
         <el-button type="primary" @click="addDynamic">确 定</el-button>
       </div>
     </el-dialog>
+    <el-backtop target=".page-component__scroll .el-scrollbar__wrap"></el-backtop>
   </div>
 </template>
 
@@ -138,14 +187,35 @@ export default {
       },
       formLabelWidth: '120px',
       dynamic:{},// get获取的动态
+      tableData:[],// 问卷数据
     }
   },
   methods: {
-    cancel(){
+    tagReturn(para){
+      switch (para) {
+        case '百度':
+          return 'success'
+          break;
+        case 'Github':
+          return 'info';
+          break;
+        case '豆瓣':
+          return 'danger';
+          break;
+        case '掘金':
+          return 'warning';
+          break;
+        default:
+      }
+    },
+    isCenter(){//回调样式
+      return "text-align:center"
+    },
+    cancel(){// 取消
       this.dialogFormVisible = false;
       this.clearForm();
     },
-    clearForm(){
+    clearForm(){ //清除表格
       this.form.option =null;
       this.form.content=null;
       this.Person.option=null;
@@ -165,8 +235,8 @@ export default {
         }
         else{
           this.user = res.data.data;
-          console.log(res.data);
-          console.log(this.user);
+          // console.log(res.data);
+          // console.log(this.user);
           // this.getDynamic(this.value);
         }
       }).catch(err =>{
@@ -199,7 +269,7 @@ export default {
       this.$axios.req('api/getDynamic').then(res =>{
         this.dynamic=res.data.data;
         let str =String(this.value);
-        console.log(str);
+        // console.log(str);
         this.dynamic = this.dynamic.filter(function(item){
           return item.date.slice(0,10)===str;
         })
@@ -210,6 +280,7 @@ export default {
     },
     getTableData(){
       this.$axios.req('api/getTableData').then(res =>{
+        this.tableData=res.data.data;
         console.log(res.data.data);
       }).catch(err =>{
         console.log(err);
@@ -277,7 +348,7 @@ export default {
   .invest{
     /*网站调查问卷*/
     width:90%;
-    height:300px;
+    /*height:300px;*/
     margin:1%;
     background-color: white;
   }
@@ -287,7 +358,7 @@ export default {
   }
   .card-body {
     padding: 1%;
-    max-height:100%;
+    /*max-height:100%;*/
     width: 100%;
   }
   .date-picker{
@@ -301,5 +372,8 @@ export default {
     padding:2% 0%;
     display: flex;
     justify-content: space-between;
+  }
+  .text-center{
+    text-align: center;
   }
 </style>

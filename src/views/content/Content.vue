@@ -22,7 +22,7 @@
               <el-menu-item @click="isCollapse=!isCollapse">
                   <i :class="{'el-icon-d-arrow-right':isCollapse==true,'el-icon-d-arrow-left':isCollapse==false}" ></i>
               </el-menu-item>
-              <el-menu-item index="/home" :class="{'solidLeftBorder':this.$route.path==='/home'}">
+              <el-menu-item index="/home" :class="{'solidLeftBorder':this.$route.path==='/home'||this.$route.path==='/'}">
                   <i class="el-icon-location"></i>
                   <span slot="title">首页</span>
               </el-menu-item>
@@ -77,7 +77,7 @@
     props: {},
     data() {
       return {
-        activeIndex:"1",//侧边栏默认选中首页
+        activeIndex:"/home",//侧边栏默认选中首页
         isCollapse: true,//默认收起侧边栏
         user:{},//用户
       };
