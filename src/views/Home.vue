@@ -113,7 +113,6 @@
           </el-table-column>
           <el-table-column
             prop="web"
-            :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]"
             label="网站名称">
             <template slot-scope="scope">
               <el-tag
@@ -158,7 +157,6 @@
         <el-button type="primary" @click="addDynamic">确 定</el-button>
       </div>
     </el-dialog>
-    <el-backtop target=".page-component__scroll .el-scrollbar__wrap"></el-backtop>
   </div>
 </template>
 
@@ -235,9 +233,7 @@ export default {
         }
         else{
           this.user = res.data.data;
-          // console.log(res.data);
-          // console.log(this.user);
-          // this.getDynamic(this.value);
+          this.$store.commit('setUser', res.data.data);
         }
       }).catch(err =>{
         console.log(err);

@@ -91,7 +91,7 @@
           }
           else{
             this.user = res.data.data;
-            console.log(this.user);
+            this.$store.commit('setUser', res.data.data);
           }
         }).catch(err =>{
           console.log(err);
@@ -116,7 +116,7 @@
     },
     mounted() {
       this.getHome();
-      this.activeIndex=this.$route.path;
+      this.activeIndex = this.$route.path;
       console.log(this.activeIndex);
     },
     created() {

@@ -160,6 +160,8 @@
           .then(res =>{
             console.log(res.data);
             if(res.data.data){
+              this.$store.commit('setUser', res.data.data);
+              console.log(this.$store.state.user);
               this.$router.push({
                 path:'/'
               })
@@ -183,6 +185,7 @@
           console.log(res.data);
           if(res.data.code===200){
             this.$router.push('/');
+            // this.$store.commit('setUser', res.data.data);
           }
         }).catch(err =>{
           console.log(err);
