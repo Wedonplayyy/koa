@@ -274,7 +274,7 @@ export default {
         console.log(err);
       })
     },
-    getTableData(){
+    getTableData(){// 获取问卷数据
       this.$axios.req('api/getTableData').then(res =>{
         this.tableData=res.data.data;
         console.log(res.data.data);

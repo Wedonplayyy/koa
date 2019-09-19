@@ -13,20 +13,32 @@
           slot="dateCell"
           slot-scope="{date, data}">
           <div style="width: 100%;max-height: 100%;max-width: 100%;" >
-            <div :class="data.isSelected ? 'is-selected' : ''" style="text-align: left;width: 100%;" @click="addDialog(data.day)">
+            <div
+              :class="data.isSelected ?
+              'is-selected' : ''"
+              style="text-align: left;width: 100%;"
+              @click="addDialog(data.day)">
               {{ data.day.slice(8)}} {{ data.isSelected ? '✔️' : ''}}
             </div>
-            <div style="width: 100%;height:60px;overflow-y:auto;font-size:10px;" v-if="hasDynamic(data.day).length!==0">
+            <div
+              style="width: 100%;height:60px;overflow-y:auto;font-size:10px;"
+              v-if="hasDynamic(data.day).length!==0">
               <div v-for="item in hasDynamic(data.day)"
                    :key="item._id"
                    @click="deleteCalendar(item._id,data.day)"
                    style="margin:0px 0px 5px 0px;padding:1px 2px;background-color: #e1f3d8;">
-                <div class="leftText">{{dateFormat(item.startTime)}}-{{dateFormat(item.endTime)}}  {{item.schedule}}</div>
                 <div class="leftText flex">
-                  参与人：
-                  <div v-for="(user,index) in item.users" :key="index">{{user}}</div>
+                  {{dateFormat(item.startTime)}}-{{dateFormat(item.endTime)}}    {{item.schedule}}
                 </div>
-                <div class="leftText">参与人数：{{item.users.length}}</div>
+                <div class="leftText flex">
+                  <div>参与人:</div>
+                  <div v-for="(user,index) in item.users" :key="index" style="display: flex;align-items: center;margin:0 8px;">
+                    {{user}}
+                  </div>
+                </div>
+                <div class="leftText flex">
+                  参与人数：  {{item.users.length}}
+                </div>
               </div>
             </div>
             <div style="clear: both"></div>
@@ -38,10 +50,10 @@
 
     <el-dialog title="添加日程" :visible.sync="outerVisible">
       <el-form :model="form">
-        <el-form-item label="日程" :label-width="formLabelWidth" :rules="[{ required: true, message: '不能为空'}]">
+        <el-form-item label="日程" :label-width="formLabelWidth" :rules="{ required: true, message: '不能为空',trigger:'blur'}">
           <el-input placeholder="准备做什么..." v-model="form.content" style="display:flex;width: 80%;" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="时间" :label-width="formLabelWidth" :rules="[{ required: true, message: '不能为空'}]">
+        <el-form-item label="时间" :label-width="formLabelWidth" :rules="[{ required: true, message: '不能为空',trigger: 'blur'}]">
           <div style="width: 80%;display: flex;justify-content: space-between;">
             <el-time-select
               placeholder="起始时间"
@@ -63,9 +75,21 @@
             </el-time-select>
           </div>
         </el-form-item>
-        <el-form-item label="参与人" :label-width="formLabelWidth">
-          <div style="display: flex;width: 100%;height:40px;">
-            <div v-for="item in this.form.person">{{item}}</div>
+        <el-form-item
+          label="参与人"
+          :label-width="formLabelWidth"
+          :rules="[{ required: true, message: '不能为空'},
+          { type: 'number', message: '年龄必须为数字值'}]">
+          <div class="flex" style="width: 100%;height:40px;">
+            <el-tag
+              style="margin: 0 2px;"
+              v-for="p in this.form.person"
+              :key="p"
+              @close="handleClose(p)"
+              closable>
+              {{p}}
+            </el-tag>
+<!--            <div v-for="item in this.form.person" style="padding:2px 4px;">{{item}}</div>-->
             <div>
               <i class="el-icon-circle-plus-outline" style="color: #409EFF;" @click="innerVisible = true" ></i>
             </div>
@@ -109,35 +133,34 @@
         props: {},
         data() {
             return {
-              // user:{},
-              id:null,//要删除的日程id
-              arr:[],
-              calendar:[],//日程数组
-              dateSelected:'',//添加日程的日期
-              value:new Date(),// 今天时间数据
-              outerVisible: false,// 对话框
-              innerVisible: false,// 参与人对话框
-              deleteDialogVisible:false,// 删除日程对话框
-              form: {
-                content: '',//日程内容
-                person: [],//参与人
+              user:{},                   //用户
+              id:null,                   //要删除的日程id
+              calendar:[],               //日程数组
+              dateSelected:'',           //添加日程的日期
+              value:new Date(),          // 今天时间数据
+              outerVisible: false,       // 添加日程外层对话框
+              innerVisible: false,       // 添加日程内层参与人对话框
+              deleteDialogVisible:false, // 日程对话框显示
+              form: {                    //添加日程表格
+                content: '',             //日程内容
+                person: [],              //参与人
               },
-              formLabelWidth: '120px',
-              startTime: '',
-              endTime: '',
-              name:'',//参与人姓名
+              formLabelWidth: '120px',   //标签长度
+              startTime: '',             //开始时间
+              endTime: '',               //结束时间
+              name:'',                   //参与人姓名
             }
 
         },
         methods: {
-          delCalendar(id){
-            console.log(id);
-
+          handleClose(tag) {
+            this.form.person.splice(this.form.person.indexOf(tag), 1);
+          },
+          delCalendar(id){//删除日程
             if(id!==null){
               this.$axios.req('api/delCalendar',{
                 id:id
               }).then(res =>{
-                // console.log(res.data);
                 if(res.data.code===200){
                   this.getCalendar();
                   this.deleteDialogVisible=false;
@@ -152,7 +175,7 @@
               });
             }
           },
-          dateFormat(times){// 日期格式化
+          dateFormat(times){// 日期分秒格式化
             let da = new Date(times);
             let h = da.getHours()+':';
             let m = da.getMinutes();
@@ -163,18 +186,18 @@
               return (String(item.startTime).slice(0, 10))===day? item:null;
               });
           },
-          cancelInner(){// 取消
+          cancelInner(){// 取消添加参与人
             this.innerVisible = false;
             this.name=null;
           },
-          cancelOuter(){// 取消
+          cancelOuter(){// 取消添加日程
             this.outerVisible = false;
             this.form.content = null;
             this.form.person = [];
             this.startTime=null;
             this.endTime=null;
           },
-          cancelDel(){
+          cancelDel(){// 弹出删除对话框
             this.deleteDialogVisible=false;
             this.id=null;
           },
@@ -192,7 +215,7 @@
               });
             }
           },
-          getCalendar(){// 获取日程
+          getCalendar(){// 获取所有日程
             this.$axios.req('api/calendar').then(res =>{
               this.calendar=res.data.data;
               console.log(res.data.data);
@@ -204,10 +227,6 @@
             if(this.form.content&&this.startTime&&this.endTime&&this.person!==[]){
               let st = new String(this.dateSelected.concat(' '+this.startTime+':00'));
               let et = new String(this.dateSelected.concat(' '+this.endTime+':00'));
-              // console.log(new Date(st));
-              // console.log(new Date(et));
-              // console.log(typeof(this.form.person));
-              // console.log(typeof(this.form.content));
               this.$axios.req('api/calendar',{
                 // 参与人
                 users: this.form.person,
@@ -218,7 +237,6 @@
                 // 日程内容
                 schedule: this.form.content,
               }).then(res =>{
-                // console.log(res.data);
                 if(res.data.code===200){
                   this.getCalendar();
                   this.cancelOuter();
@@ -243,16 +261,8 @@
             let month = da.getMonth()+1+'-';
             let day = da.getDate();
             let today = [year,month,day].join('');
-            // console.log(today);
-            // console.log(typeof(today));
-            // console.log(typeof(this.dateSelected));
-            console.log(dateSelected);
             if(this.validTime(today,dateSelected)){
               this.outerVisible = true;
-              // this.$message({
-              //   message: '恭喜你，这是一条成功消息',
-              //   type: 'success'
-              // });
             }else{
               this.$message({
                 showClose: true,
@@ -298,9 +308,7 @@
                 this.$router.push('/login');
               }
               else{
-                // this.user = res.data.data;
-                // console.log(this.user);
-                // this.$store.commit('setUser', res.data.data);
+                this.user = res.data.data;
               }
             }).catch(err =>{
               console.log(err);
@@ -340,6 +348,8 @@
   }
   .flex{
     display: flex;
+    padding: 0 2px;
+    align-items: center;
   }
   .dialog-footer{
     width:100%;

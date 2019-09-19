@@ -36,3 +36,20 @@ Mock.mock('api/getTableData','get',{
     'web|1':["Github","豆瓣","百度","掘金"],
   }]
 })
+
+Mock.mock('api/getAddressData','get',{
+  code:200,
+  msg:'success',
+  'data|15':[{
+    '_id|+1': 1,
+    name:'@cword(2,4)',
+    company:'@cword(2,4)',
+    'position|1':['经理','实习生','主管'],
+    'tags|0-3':['@cword(2,4)'],
+    email:/[1-9]\d{7,10}@(qq|163Igmail)\.com/,
+    phone:/1([38]\d|5[0-35-9]|7[3678])\d{8}$/,
+    tel:/\d{3}-\d{8}|\d{4}-\d{7}/,
+    QQ:/\d{3}\d{8}|\d{4}\d{7}/,
+    color:'@hex()'
+  }]
+})
