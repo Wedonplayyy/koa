@@ -16,19 +16,28 @@
           <div style="display: flex;width:90%;height:40%;margin:5%;align-items: center">
             <div style="width:30%;height: 100%;display: flex;align-items: center;justify-content: center">
               <div style="width:75px;height:75px;border-radius: 75px;" :style="{'background-color':item.color}">
+                <div style="color: white;width: 100%;height:100%;display: flex;justify-content: center;align-items: center;">{{item.name}}</div>
               </div>
             </div>
             <div style="margin:5%;">
               <div style="display: flex;padding:0 2px;">{{item.name}}</div>
               <div style="display: flex;padding:0 2px;">{{item.company}}/{{item.position}}</div>
-              <div style="display: flex">
-                <div v-for="(tag,index) in item.tags" :key="index">
-                  <div style="padding:0 2px;">
-                    {{tag}}
-                  </div>
-                </div>
+              <div style="display: flex" v-if="item.tags.length!==0">
+                <el-tag
+                  v-for="tag in item.tags"
+                  :key="tag">
+                  {{tag}}
+                </el-tag>
               </div>
+              <div v-else style="color: gray;font-size: 15px;padding:11px 0">快来给他/她添加标签吧~</div>
             </div>
+          </div>
+          <div style="width: 70%;height:40%;margin: 5% 15%;text-align: left;font-size: 13px;">
+            <div>邮箱：{{item.email}}</div>
+            <div>电话：{{item.tel}}</div>
+            <div>手机：{{item.phone}}</div>
+            <div>性别：{{item.sex}}</div>
+            <div>QQ：{{item.QQ}}</div>
           </div>
         </div>
       </div>

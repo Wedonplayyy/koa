@@ -36,15 +36,15 @@
               </el-menu-item>
               <el-submenu index="1" >
                 <template slot="title"  >
-                  <div :class="{'solidLeftBorder':(this.$route.path==='/administration/offer')||(this.$route.path==='/administration/person')||(this.$route.path==='/administration/salary')}">
+                  <div :class="{'solidLeftBorder':(this.$route.path==='/offer')||(this.$route.path==='/person')||(this.$route.path==='/salary')}">
                     <i class="el-icon-user" ></i>
                     <span slot="title">组织员工</span>
                   </div>
                 </template>
                 <el-menu-item-group>
-                  <el-menu-item index="/administration/offer">offer管理</el-menu-item>
-                  <el-menu-item index="/administration/person">人员信息</el-menu-item>
-                  <el-menu-item index="/administration/salary">薪酬管理</el-menu-item>
+                  <el-menu-item index="/offer">offer管理</el-menu-item>
+                  <el-menu-item index="/person">人员信息</el-menu-item>
+                  <el-menu-item index="/salary">薪酬管理</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
               <el-submenu index="5">
@@ -53,8 +53,7 @@
                   <span >表单页</span>
                 </template>
                 <el-menu-item-group>
-                  <el-menu-item index="5-1">选项1</el-menu-item>
-                  <el-menu-item index="5-2">选项2</el-menu-item>
+                  <el-menu-item index="/form">分步表单</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
             </el-menu>
@@ -91,7 +90,7 @@
           }
           else{
             this.user = res.data.data;
-            this.$store.commit('setUser', res.data.data);
+            // this.$store.commit('setUser', res.data.data);
           }
         }).catch(err =>{
           console.log(err);

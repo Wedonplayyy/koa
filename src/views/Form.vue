@@ -4,8 +4,8 @@
       <el-avatar shape="square" size="small" icon="el-icon-s-unfold"></el-avatar>
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>组织员工</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/administration/offer' }">offer管理</el-breadcrumb-item>
+        <el-breadcrumb-item>表单页</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/form' }">分部表单</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div style="width:98%;padding:1%;">
@@ -16,23 +16,15 @@
 
 <script>
     export default {
-        name: "Offer",
+        name: "Form",
         components: {},
         props: {},
         data() {
             return {}
         },
-        methods: {
-          getOfferData(){
-            this.$axios.req('api/getOfferData').then(res =>{
-              console.log(res.data);
-            }).catch(err =>{
-              console.log(err);
-            });
-          }
-        },
+        methods: {},
         mounted() {
-          this.getOfferData();
+
         },
         created() {
 

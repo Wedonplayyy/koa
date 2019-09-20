@@ -1,7 +1,16 @@
 <template>
-    <div>
-        Person
+  <div style="width: 1500px;">
+    <div class="title">
+      <el-avatar shape="square" size="small" icon="el-icon-s-unfold"></el-avatar>
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>组织员工</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/administration/person' }">人员信息</el-breadcrumb-item>
+      </el-breadcrumb>
     </div>
+    <div style="width:98%;padding:1%;">
+    </div>
+  </div>
 
 </template>
 
@@ -27,6 +36,12 @@
     }
 </script>
 
-<style scoped lang="scss">
-
+<style scoped>
+  .title{
+    /*标题*/
+    /*width:100%;*/
+    padding:15px;
+    display: flex;
+    align-items: center;
+  }
 </style>

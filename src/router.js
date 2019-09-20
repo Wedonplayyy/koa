@@ -4,10 +4,10 @@ import Home from './views/Home.vue';
 import Content from './views/content/Content.vue';
 import Calendar from './views/Calendar.vue';
 import Address from './views/Address.vue';
-import Administration from './views/Administration.vue';
 import Offer from './views/Administration/Offer.vue';
 import Salary from './views/Administration/Salary.vue';
 import Person from './views/Administration/Person.vue';
+import Form from './views/Form.vue';
 
 Vue.use(Router);
 
@@ -35,10 +35,10 @@ export default new Router({
         {path:'/home', component:Home},
         {path:'/calendar', component:Calendar},
         {path:'/address', component:Address},
-        {path:'/administration', component:Administration},
-        {path:'/administration/offer', component:Offer},
-        {path:'/administration/salary', component:Salary},
-        {path:'/administration/person', component:Person},
+        {path:'/offer', component:Offer},
+        {path:'/salary', component:Salary},
+        {path:'/person', component:Person},
+        {path:'/form', component:Form},
         ]
     },
   ],
