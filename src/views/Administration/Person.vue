@@ -55,34 +55,34 @@
             <el-table-column
               prop="email"
               :show-overflow-tooltip="true"
-              label="个人邮箱">
+              label="工号">
             </el-table-column>
             <el-table-column
               prop="type"
-              label="证件类型">
+              label="机构">
             </el-table-column>
             <el-table-column
               prop="number"
               :show-overflow-tooltip="true"
-              label="证件号码">
+              label="部门">
             </el-table-column>
             <el-table-column
               prop="sex"
-              label="性别">
+              label="试用期开始日期">
             </el-table-column>
             <el-table-column
               prop="position"
-              label="职位">
+              label="试用期结束日期">
             </el-table-column>
             <el-table-column
-              label="籍贯"
+              label="转正审批状态"
               :show-overflow-tooltip="true">
               <template slot-scope="scope">{{ scope.row.region }}</template>
             </el-table-column>
             <el-table-column
               prop="QQ"
               :show-overflow-tooltip="true"
-              label="qq">
+              label="操作">
             </el-table-column>
             <el-table-column
               prop="date"
