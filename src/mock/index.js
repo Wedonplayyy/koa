@@ -80,3 +80,17 @@ Mock.mock('api/getOfferData','get',{
     marriage:''                                //婚姻状态
   }]
 })
+Mock.mock('api/getPersonData','get',{
+  code:200,
+  msg:'success',
+  'data|100':[{
+    '_id|+1': 1,
+    name:'@cword(2,4)',                        //名字
+    number:'@string("number", 4)',             //工号
+    'jg|1':['','','',''],   //机构
+    dept:'@cword(2,4)',                        //部门
+    startTime:'@date("yyyy-MM-dd")',           //试用期开始日期
+    endTime:'@date("yyyy-MM-dd")',             //试用期结束日期
+    status:''                                  //状态
+  }]
+})

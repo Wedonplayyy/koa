@@ -14,24 +14,24 @@
         <div style="display: flex;justify-content: space-between;margin:0 0 5px 0;">
           <div style="display: flex;font-size: 16px;font-weight: bold;margin:0 0 15px 0;">
             <div style="background-color: #41d740;width:22px;height:22px;">
-              <i class="el-icon-folder-opened" style="color: white;"></i>
+              <i class="el-icon-user" style="color: white;"></i>
             </div>
             <div style="padding: 0 2px;">人员信息</div>
           </div>
           <el-row>
-            <el-button size="small" type="primary">新建offer</el-button>
-            <el-button size="small" type="primary">转移状态</el-button>
+            <el-button size="small" type="primary">
+              确认
+            </el-button>
+            <el-button size="small" type="primary">取消</el-button>
             <el-button size="small" type="primary">导出</el-button>
           </el-row>
         </div>
         <el-card class="box-card">
           <div slot="header" style="display: flex;">
             <el-row>
-              <el-button type="primary" round size="small">待发offer</el-button>
-              <el-button type="primary" round size="small">已发offer</el-button>
-              <el-button type="primary" round size="small">已接受offer</el-button>
-              <el-button type="primary" round size="small">已拒绝offer</el-button>
-              <el-button type="primary" round size="small">已入职offer</el-button>
+              <el-button type="primary" round size="small">全部员工</el-button>
+              <el-button type="primary" round size="small">考核中员工</el-button>
+              <el-button type="primary" round size="small">已转正员工</el-button>
             </el-row>
           </div>
           <el-table
@@ -138,7 +138,7 @@
         return "text-align:center;"
       },
       getOfferData(){//获得数据
-        this.$axios.req('api/getOfferData').then(res =>{
+        this.$axios.req('api/getPersonData').then(res =>{
           this.data=res.data.data;
           this.total = this.data.length;
           console.log(this.data);
