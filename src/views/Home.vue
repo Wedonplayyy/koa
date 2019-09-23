@@ -7,18 +7,27 @@
     </el-breadcrumb></div>
     <div class="graph">
       <div class="card">
-        <div>本月营收</div>
-        <el-progress type="circle" :percentage="25"></el-progress>
+        <div>
+          <div style="color: lightgrey;">本月营收</div>
+          <div style="font-size: 18px;">￥</div>
+        </div>
+        <el-progress width="80" type="circle" :percentage="25"></el-progress>
       </div>
       <el-divider direction="vertical"></el-divider>
       <div class="card">
-        <div>待回款</div>
-        <el-progress type="circle" :percentage="25"></el-progress>
+        <div>
+          <div style="color: lightgrey;">待回款</div>
+          <div style="font-size: 18px;">￥</div>
+        </div>
+        <el-progress width="80" type="circle" :percentage="25"></el-progress>
       </div>
       <el-divider direction="vertical"></el-divider>
       <div class="card">
-        <div>合同</div>
-        <el-progress type="circle" :percentage="25"></el-progress>
+        <div>
+          <div style="color: lightgrey;">合同</div>
+          <div style="font-size: 18px;">￥</div>
+        </div>
+        <el-progress width="80" type="circle" :percentage="25"></el-progress>
       </div>
     </div>
     <div style="display: flex;">
@@ -371,5 +380,13 @@ export default {
   }
   .text-center{
     text-align: center;
+  }
+  html,.body,#app,.el-container{
+    /*设置内部填充为0，几个布局元素之间没有间距*/
+    padding: 0px;
+    /*外部间距也是如此设置*/
+    margin: 0px;
+    /*统一设置高度为100%*/
+    height: 100%;
   }
 </style>

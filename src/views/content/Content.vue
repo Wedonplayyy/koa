@@ -1,7 +1,6 @@
 <template>
     <div class="body">
-      <router-view v-if="$route.path ==='/login'"></router-view>
-      <el-container v-else class="el-container">
+      <el-container style="height: 100%;" direction="vertical">
         <el-header class="el-header">
           <div style="display: flex;justify-content: space-between;height: 100%;">
             <div>hyy后台管理系统</div>
@@ -129,6 +128,7 @@
 </script>
 
 <style scoped>
+
   .el-header {
     background-color: #B3C0D1;
     /*text-align: center;*/
@@ -159,5 +159,13 @@
     background-color: #E9EEF3;
     text-align: center;
     /*line-height: 160px;*/
+  }
+  html,.body,#app,.el-container{
+    /*设置内部填充为0，几个布局元素之间没有间距*/
+    padding: 0px;
+    /*外部间距也是如此设置*/
+    margin: 0px;
+    /*统一设置高度为100%*/
+    height: 100%;
   }
 </style>
