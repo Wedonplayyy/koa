@@ -3,7 +3,7 @@
       <el-container style="height: 100%;" direction="vertical">
         <el-header class="el-header">
           <div style="display: flex;justify-content: space-between;height: 100%;">
-            <div>hyy后台管理系统</div>
+            <div>后台管理系统</div>
             <div style="display: flex;justify-content: space-between;height: 100%;">
               <div style="display: flex;align-items: center;height: 100%;">
                 <el-avatar icon="el-icon-user-solid"></el-avatar>
@@ -52,7 +52,7 @@
                   <span >表单页</span>
                 </template>
                 <el-menu-item-group>
-                  <el-menu-item index="/form">分步表单</el-menu-item>
+                  <el-menu-item index="/form" :class="{'solidLeftBorder':this.$route.path==='/form'}">分步表单</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
             </el-menu>

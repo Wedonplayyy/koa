@@ -5,7 +5,7 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>组织员工</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/administration/person' }">人员信息</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/person' }">人员信息</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div style="width:98%;padding:1%;">
@@ -20,18 +20,17 @@
           </div>
           <el-row>
             <el-button size="small" type="primary">
-              确认
+              批量转正申请
             </el-button>
-            <el-button size="small" type="primary">取消</el-button>
             <el-button size="small" type="primary">导出</el-button>
           </el-row>
         </div>
         <el-card class="box-card">
           <div slot="header" style="display: flex;">
             <el-row>
-              <el-button type="primary" round size="small">全部员工</el-button>
-              <el-button type="primary" round size="small">考核中员工</el-button>
-              <el-button type="primary" round size="small">已转正员工</el-button>
+                <el-button type="primary" round size="small" plain @click="getAll">全部员工</el-button>
+                <el-button type="primary" round size="small" plain @click="unsatisfiedData">考核中员工</el-button>
+                <el-button type="primary" round size="small" plain @click="satisfiedData">已转正员工</el-button>
             </el-row>
           </div>
           <el-table
@@ -53,41 +52,36 @@
               width="100">
             </el-table-column>
             <el-table-column
-              prop="email"
+              prop="number"
               :show-overflow-tooltip="true"
               label="工号">
             </el-table-column>
             <el-table-column
-              prop="type"
+              prop="jg"
               label="机构">
             </el-table-column>
             <el-table-column
-              prop="number"
+              prop="dept"
               :show-overflow-tooltip="true"
               label="部门">
             </el-table-column>
             <el-table-column
-              prop="sex"
+              prop="startTime"
               label="试用期开始日期">
             </el-table-column>
             <el-table-column
-              prop="position"
+              prop="endTime"
               label="试用期结束日期">
             </el-table-column>
             <el-table-column
               label="转正审批状态"
               :show-overflow-tooltip="true">
-              <template slot-scope="scope">{{ scope.row.region }}</template>
+              <template slot-scope="scope"><div style="color:#409EFF">{{ scope.row.status}}</div></template>
             </el-table-column>
             <el-table-column
-              prop="QQ"
               :show-overflow-tooltip="true"
               label="操作">
-            </el-table-column>
-            <el-table-column
-              prop="date"
-              label="入职时间"
-              show-overflow-tooltip>
+              <el-button type="primary" size="small"  @click="">编辑试用期</el-button>
             </el-table-column>
           </el-table>
           <div class="block">
@@ -117,8 +111,8 @@
     props: {},
     data() {
       return {
-        data:{},
-        tableData: [],
+        data:[],
+        allData: [],
         multipleSelection: [],
         total: 0,
         pagesize:10,
@@ -126,6 +120,26 @@
       }
     },
     methods: {
+      getAll(){//全部员工
+        this.data=[...this.allData];
+        this.total = this.data.length;
+        // console.log(this.data);
+        // this.getOfferData();
+      },
+      unsatisfiedData(){
+        let temp=this.allData.filter((item) =>{return item.status==='审批中'});
+        this.data=[...temp];
+        this.total= this.data.length;
+        // console.log(temp);
+      },
+      satisfiedData(){
+        let temp=this.allData.filter((item) =>{return item.status==='审批通过'});
+        this.data=[...temp];
+        this.total= this.data.length;
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
         this.pagesize = val;
@@ -139,9 +153,8 @@
       },
       getOfferData(){//获得数据
         this.$axios.req('api/getPersonData').then(res =>{
-          this.data=res.data.data;
-          this.total = this.data.length;
-          console.log(this.data);
+          this.allData=res.data.data;
+          console.log(this.allData);
         }).catch(err =>{
           console.log(err);
         });

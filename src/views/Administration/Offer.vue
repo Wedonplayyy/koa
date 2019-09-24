@@ -5,7 +5,7 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>组织员工</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/administration/offer' }">offer管理</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/offer' }">offer管理</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div style="width:98%;padding:1%;">
@@ -27,11 +27,11 @@
         <el-card class="box-card">
           <div slot="header" style="display: flex;">
             <el-row>
-              <el-button type="primary" round size="small">待发offer</el-button>
-              <el-button type="primary" round size="small">已发offer</el-button>
-              <el-button type="primary" round size="small">已接受offer</el-button>
-              <el-button type="primary" round size="small">已拒绝offer</el-button>
-              <el-button type="primary" round size="small">已入职offer</el-button>
+              <el-button type="primary" round size="small">待发offer({{satisfiedData('待发offer')}})</el-button>
+              <el-button type="primary" round size="small">已发offer({{satisfiedData('已发offer')}})</el-button>
+              <el-button type="primary" round size="small">已接受offer({{satisfiedData('已接受offer')}})</el-button>
+              <el-button type="primary" round size="small">已拒绝offer({{satisfiedData('已拒绝offer')}})</el-button>
+              <el-button type="primary" round size="small">已入职offer({{satisfiedData('已入职offer')}})</el-button>
             </el-row>
           </div>
           <el-table
@@ -117,7 +117,7 @@
         props: {},
         data() {
             return {
-              data:{},
+              data:[],
               tableData: [],
               multipleSelection: [],
               total: 0,
@@ -126,6 +126,15 @@
             }
         },
         methods: {
+          satisfiedData(str){
+            let temp=this.data.filter((item) =>{return item.offer===str});
+            // this.data=[...temp];
+            console.log(temp.length);
+            return  temp.length;
+          },
+          handleSelectionChange(val) {
+            this.multipleSelection = val;
+          },
           handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
             this.pagesize = val;

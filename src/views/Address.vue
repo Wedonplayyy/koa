@@ -9,7 +9,7 @@
     </div>
     <div class="flexDiv" style="width:98%;padding:1%;">
       <div class="left">
-        <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+        <el-tree default-expand-all :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
       </div>
       <div class="main">
         <div class="grid-item" v-for="item in this.list">
@@ -55,39 +55,87 @@
             return {
               list:[],//通讯录数据
               data: [{
-                label: '一级 1',
+                label: '区域中心',
                 children: [{
-                  label: '二级 1-1',
+                  label: '哈尔滨公司'
+                },{
+                  label: '微易旅游',
                   children: [{
-                    label: '三级 1-1-1'
-                  }]
-                }]
-              }, {
-                label: '一级 2',
-                children: [{
-                  label: '二级 2-1',
-                  children: [{
-                    label: '三级 2-1-1'
-                  }]
-                }, {
-                  label: '二级 2-2',
-                  children: [{
-                    label: '三级 2-2-1'
-                  }]
-                }]
-              }, {
-                label: '一级 3',
-                children: [{
-                  label: '二级 3-1',
-                  children: [{
-                    label: '三级 3-1-1'
-                  }]
-                }, {
-                  label: '二级 3-2',
-                  children: [{
-                    label: '三级 3-2-1'
-                  }]
-                }]
+                    label: '微易'
+                  }]},
+                  {
+                    label:'测试部门'
+                  },
+                  {
+                      label:'北方区域中心',
+                      children:[{
+                        label:'东南亚事业部'
+                      },{
+                        label:'B2B事业部',
+                        children:[{
+                          label:'产品组'
+                        },{
+                          label:'途牛组'
+                        },{
+                          label:'携程组'
+                        },{
+                          label:'其他电商组'
+                        },{
+                          label:'资料组'
+                        },{
+                          label:'运营支持组'
+                        }]
+                      },{
+                        label:'华北销售区',
+                        children:[{
+                          label:'京津组'
+                        },{
+                          label:'济南公司'
+                        },{
+                          label:'石家庄公司'
+                        },{
+                          label:'河北组'
+                        }]
+                      },{
+                        label:'中原销售区',
+                        children:[{
+                          label:'太原公司'
+                        },{
+                          label:'内蒙古组'
+                        },{
+                          label:'郑州公司'
+                        }]
+                      },{
+                        label:'单团部',
+                      },{
+                        label:'新销售业务部'
+                      },{
+                        label:'产品操作部',
+                        children:[{
+                          label:'欧洲组'
+                        },{
+                          label:'中东非组'
+                        },{
+                          label:'票务组'
+                        },{
+                          label:'单团组'
+                        }]
+                      },{
+                        label:'签证部',
+                        children:[{
+                          label:'外联部'
+                        }]
+                      }]
+                    },
+                  {
+                      label:'西南区域中心',
+                      children:[{
+                        label:'西南总经理办公室'
+                      },{
+                        label:'成都公司',
+                        children:[]
+                      }]
+                    }]
               }],
               defaultProps: {
                 children: 'children',

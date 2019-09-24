@@ -9,25 +9,25 @@
       <div class="card">
         <div>
           <div style="color: lightgrey;">本月营收</div>
-          <div style="font-size: 18px;">￥</div>
+          <div style="font-size: 18px;">￥{{data[0].number}}</div>
         </div>
-        <el-progress width="80" type="circle" :percentage="25"></el-progress>
+        <el-progress :width="width" type="circle" :percentage="data[0].percent"></el-progress>
       </div>
       <el-divider direction="vertical"></el-divider>
       <div class="card">
         <div>
           <div style="color: lightgrey;">待回款</div>
-          <div style="font-size: 18px;">￥</div>
+          <div style="font-size: 18px;">￥{{data[1].number}}</div>
         </div>
-        <el-progress width="80" type="circle" :percentage="25"></el-progress>
+        <el-progress :width="width" type="circle" :percentage="data[1].percent"></el-progress>
       </div>
       <el-divider direction="vertical"></el-divider>
       <div class="card">
         <div>
           <div style="color: lightgrey;">合同</div>
-          <div style="font-size: 18px;">￥</div>
+          <div style="font-size: 18px;">￥{{data[2].number}}</div>
         </div>
-        <el-progress width="80" type="circle" :percentage="25"></el-progress>
+        <el-progress :width="width" type="circle" :percentage="data[2].percent"></el-progress>
       </div>
     </div>
     <div style="display: flex;">
@@ -36,7 +36,7 @@
           <span>利润</span>
         </div>
         <div>
-
+          <ve-wordcloud :data="chartData" sizeMax="30"></ve-wordcloud>
         </div>
       </el-card>
       <el-card class="updating" shadow="hover">
@@ -177,6 +177,12 @@ export default {
   props: {},
   data() {
     return {
+      chartData: {
+        columns: ['word', 'count'],
+        rows: []
+      },
+      data:[],//首页数据
+      width:80,
       user:{},//用户
       value:null,//日期
       pickerOptions: {// 日期选择
@@ -198,6 +204,14 @@ export default {
     }
   },
   methods: {
+    getChartData(){
+      this.$axios.req('api/getChartData').then(res =>{
+        console.log(res.data.data);
+        this.chartData.rows=res.data.data;
+      }).catch(err =>{
+        console.log(err);
+      })
+    },
     tagReturn(para){
       switch (para) {
         case '百度':
@@ -291,11 +305,21 @@ export default {
         console.log(err);
       })
     },
+    getHomeData(){
+      this.$axios.req('api/getHomeData').then(res =>{
+        this.data = res.data.data;
+        console.log(this.data);
+      }).catch(err =>{
+        console.log(err);
+      })
+    },
   },
 
   mounted() {
     this.getHome();
     this.getTableData();
+    this.getHomeData();
+    this.getChartData();
   },
   created() {
 
@@ -337,7 +361,7 @@ export default {
   .charts{
     /*利润词云图*/
     width:44%;
-    height:400px;
+    height:500px;
     margin:1%;
     background-color: white;
   }
