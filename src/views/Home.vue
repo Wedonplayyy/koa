@@ -9,25 +9,25 @@
       <div class="card">
         <div>
           <div style="color: lightgrey;">本月营收</div>
-          <div style="font-size: 18px;">￥{{data[0].number}}</div>
+          <div style="font-size: 18px;">￥{{data0.number}}</div>
         </div>
-        <el-progress :width="width" type="circle" :percentage="data[0].percent"></el-progress>
+        <el-progress :width="width" type="circle" :percentage="data0.percent"></el-progress>
       </div>
       <el-divider direction="vertical"></el-divider>
       <div class="card">
         <div>
           <div style="color: lightgrey;">待回款</div>
-          <div style="font-size: 18px;">￥{{data[1].number}}</div>
+          <div style="font-size: 18px;">￥{{data1.number}}</div>
         </div>
-        <el-progress :width="width" type="circle" :percentage="data[1].percent"></el-progress>
+        <el-progress :width="width" type="circle" :percentage="data1.percent"></el-progress>
       </div>
       <el-divider direction="vertical"></el-divider>
       <div class="card">
         <div>
           <div style="color: lightgrey;">合同</div>
-          <div style="font-size: 18px;">￥{{data[2].number}}</div>
+          <div style="font-size: 18px;">￥{{data2.number}}</div>
         </div>
-        <el-progress :width="width" type="circle" :percentage="data[2].percent"></el-progress>
+        <el-progress :width="width" type="circle" :percentage="data2.percent"></el-progress>
       </div>
     </div>
     <div style="display: flex;">
@@ -131,7 +131,7 @@
           <el-table-column
             label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" style="padding: 10px 20px;">查看网站详情</el-button>
+              <el-button type="primary" style="padding: 10px 20px;" @click="showDialog">查看网站详情</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -166,6 +166,9 @@
         <el-button type="primary" @click="addDynamic">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="dialogVisible">
+      <div id="qrcode" style="width: 560px;height: 560px;background-color: white;"></div>
+    </el-dialog>
   </div>
 </template>
 
@@ -177,11 +180,15 @@ export default {
   props: {},
   data() {
     return {
+      qrcode: 'www.baidu.com',
       chartData: {
         columns: ['word', 'count'],
         rows: []
       },
-      data:[],//首页数据
+      data:[],
+      data0:{},//首页数据
+      data1:{},//首页数据
+      data2:{},//首页数据
       width:80,
       user:{},//用户
       value:null,//日期
@@ -190,6 +197,7 @@ export default {
           return time.getTime() > Date.now();
         }
       },
+      dialogVisible:false,
       dialogFormVisible: false, // 添加动态对话框
       form: {// 添加动态
         option: null,
@@ -204,6 +212,9 @@ export default {
     }
   },
   methods: {
+    showDialog(){
+      this.dialogVisible = true;
+    },
     getChartData(){
       this.$axios.req('api/getChartData').then(res =>{
         console.log(res.data.data);
@@ -308,6 +319,9 @@ export default {
     getHomeData(){
       this.$axios.req('api/getHomeData').then(res =>{
         this.data = res.data.data;
+        this.data0 = this.data[0];
+        this.data1 = this.data[1];
+        this.data2 = this.data[2];
         console.log(this.data);
       }).catch(err =>{
         console.log(err);

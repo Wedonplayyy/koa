@@ -8,6 +8,8 @@ import axios from 'axios';
 import http from './http'
 import './mock'
 import VCharts from 'v-charts'
+import QRCode from 'qrcode'
+
 
 Vue.use(VCharts)
 
